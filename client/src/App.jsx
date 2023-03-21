@@ -45,21 +45,21 @@ function App() {
 
   return (
     <div className="w-full py-4  flex flex-col items-center justify-center bg-indigo-600 ">
-      <form className="flex flex-col " onSubmit={sendMessage}>
-        <input className="mb-4" onChange={(e) => setMessage({ ...message, name: e.target.value })} type="text" />
-        <input className="mb-4" onChange={(e) => setMessage({ ...message, email: e.target.value })} type="text" />
-        <button type="submit">send</button>
+      <form className="flex flex-col mb-4 " onSubmit={sendMessage}>
+        <input className="mb-4" placeholder="name" onChange={(e) => setMessage({ ...message, name: e.target.value })} type="text" />
+        <input className="mb-4" placeholder="email" onChange={(e) => setMessage({ ...message, email: e.target.value })} type="text" />
+        <button type="submit" className="border-2 text-white  py-2 px-4 uppercase">send</button>
       </form>
 
       {
         received.map((item) => {
           return (
-            <div key={item._id}>
-              <p>{item.name}</p>
-              <p>{item._id}</p>
-              <p>{item.email}</p>
-              <button onClick={() => deleteData(item._id)}>delete</button>
-            </div>
+            <di className="py-4 px-4 text-white mb-4 " key={item._id}>
+              <p>ID : {item._id}</p>
+              <p>Name: {item.name}</p>
+              <p>Email : {item.email}</p>
+              <button className="border-2 text-white mt-4 py-2 px-4 uppercase" onClick={() => deleteData(item._id)}>delete</button>
+            </di>
           )
         })
       }
