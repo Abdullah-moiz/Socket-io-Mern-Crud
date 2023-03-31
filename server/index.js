@@ -30,20 +30,12 @@ const io = new Server(httpServer, {
     }
 });
 
-// create a new http server for socket on port 5001
-const socketHttpServer = createServer();
-const ioSocket = new Server(socketHttpServer, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-    }
-});
 
-ioSocket.on("connection", (socket) => {
+io.on("connection", (socket) => {
     socket.on('message', async (payload) => {
         try {
             const saveData =  await test.create(payload);
-            ioSocket.emit('message', saveData);
+            io.emit('message', saveData);
         } catch (error) {
             console.log(error)
         }
@@ -53,7 +45,7 @@ ioSocket.on("connection", (socket) => {
         console.log('getting messages ')
         try {
             const saveData =  await test.find({});
-            ioSocket.emit('getMessages', saveData);
+            io.emit('getMessages', saveData);
         } catch (error) {
             console.log(error)
         }
@@ -64,7 +56,7 @@ ioSocket.on("connection", (socket) => {
         try {
             const saveData =  await test.findByIdAndDelete(payload);
             const getData = await test.find({});
-            ioSocket.emit('delete', getData);
+            io.emit('delete', getData);
         } catch (error) {
             console.log(error)
         }
@@ -72,16 +64,11 @@ ioSocket.on("connection", (socket) => {
 
 });
 
-ioSocket.on("disconnect", () => {
+io.on("disconnect", () => {
     console.log("Client disconnected");
 });
 
 
-socketHttpServer.listen(5001, () => {
-    console.log(`Socket.IO server is running on http://localhost:5001`);
-});
-
-io.attach(httpServer);
 
 mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("Database connected successfully"))
